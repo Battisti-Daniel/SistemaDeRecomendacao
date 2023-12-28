@@ -82,7 +82,7 @@ cv = CountVectorizer(max_features=7000,stop_words="english")
 
 vectors = cv.fit_transform(df_filmes_novo["tags"]).toarray()
 
-#verifica a similaridade baseado no calculo da distancia de coseno
+#verifica a similaridade baseado no calculo da distancia de cosseno
 similaridades = cosine_similarity(vectors)
 
 def sistema_recomendacao(filme):

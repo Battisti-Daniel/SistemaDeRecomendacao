@@ -70,9 +70,9 @@ class NeuralNetwork:
             entrada = dados[i]
             
             if previsao == 0:
-                print(f'Transação {dados[i]} nao Suspeita')
+                print(f'Transação {entrada} nao Suspeita')
             else:
-                print(f'Transação {dados[i]} suspeita')
+                print(f'Transação {entrada} suspeita')
 
 taxa_aprendizado =0.01
 num_interacoes = 10000

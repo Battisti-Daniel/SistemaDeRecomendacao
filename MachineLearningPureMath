@@ -1,0 +1,103 @@
+import numpy as np
+
+class NeuralNetwork:
+    
+    def __init__(self, taxa_aprendizado, num_interacoes):
+        
+        self.taxa_aprendizado = taxa_aprendizado
+        self.num_interacoes = num_interacoes
+        
+        self.pesos = None
+        self.bias = None
+        
+    def func_sigmoid(self, pred):
+        sig = 1 / (1 + np.exp(-pred))
+            
+        return sig
+        
+    def fit(self, X, y):
+            
+        num_registros, num_atributos = X.shape
+            
+        self.pesos = np.zeros(num_atributos)
+            
+        self.bias = 0
+            
+        print('\n Iniciando o Treinamento, por favor aguarde....')
+            
+        for i in range(self.num_interacoes):
+                
+            print(f'\nTreinamento do Modelo na Iteração {i}')
+                
+            previsao = np.dot(X, self.pesos) + self.bias
+            print(f'\nPrevisão antes da função de ativação: {previsao}')
+                
+            previsao_final = self.func_sigmoid(previsao)
+            print(f'\nPrevisão depois da função de ativação: {previsao_final}')
+                
+            erro = previsao_final - y
+            print(f'\nErro do Modelo: {erro}')
+                
+            dw = (1 / num_registros) * np.dot(X.T, erro)
+            db = (1 / num_registros) * np.sum(previsao_final - y)
+                
+            self.pesos -= self.taxa_aprendizado * dw
+            print(f'\nValores de pesos: {self.pesos}')
+                
+            self.bias -= self.taxa_aprendizado * db
+            print(f'\nValores de bias: {self.bias}')
+                
+        print('\nTreinamento Concluido! \n')
+            
+    def predict(self, X): 
+            
+        previsao = np.dot(X, self.pesos) + self.bias
+        
+        print(f'Previsao antes de passar pela funcao de ativação: {previsao}')
+            
+        previsao_final = self.func_sigmoid(previsao)
+        print(f'Previsao pela funcao de ativação: {previsao_final}')
+            
+        classe_prevista = [1 if i > 0.5 else 0 for i in previsao_final]
+            
+        return classe_prevista
+    
+    def prev(self, dados):
+        previsoes_teste = self.predict(dados)
+        
+        for i,previsao in enumerate(previsoes_teste):
+            
+            entrada = dados[i]
+            
+            if previsao == 0:
+                print(f'Transação {dados[i]} nao Suspeita')
+            else:
+                print(f'Transação {dados[i]} suspeita')
+
+taxa_aprendizado =0.01
+num_interacoes = 10000
+dados_entrada = np.array([[1,2.5], [2,3], [3,5], [1,4], [1.5,2], [5,6], [6,7],[4,5.5]])
+
+#0 = nao suspeita
+#1 = suspeita
+
+dados_saida = np.array([0,0,1,0,1,0,1,1])
+
+
+X_treino = np.array([[1,2.5], [2,3], [3,5], [1,4],[5,6], [6,7]])
+Y_treino = np.array([0,0,1,0,1,1])
+
+X_teste = np.array([[1.5,2], [4,5.5]])
+Y_teste = np.array([0, 1])
+
+
+modelo = NeuralNetwork(taxa_aprendizado, num_interacoes)
+
+
+modelo.fit(X_treino, Y_treino)
+
+modelo.prev(X_teste)
+
+novos_dados = np.array([[1,2.5], [2,3], [3,5], [1,4], [1.5,2], [5,6], [6,7],[4,5.5]])
+
+modelo.prev(novos_dados)
